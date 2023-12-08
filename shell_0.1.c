@@ -1,3 +1,4 @@
+#include "shell.h"
 /**
  * add - Adds two integers.
  * @a: first integer.
