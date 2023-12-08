@@ -1,8 +1,3 @@
-/*
- * File: shell.h
- * Desc: Header file for the simple shell project.
- */
-
 #ifndef SHELL_H
 #define SHELL_H
 
