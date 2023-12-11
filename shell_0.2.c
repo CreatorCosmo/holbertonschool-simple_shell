@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-
+#include "shell.h"
 #define MAX_CMD_LEN 256
 #define PROMPT "#cisfun$ "
 #define DELIMITERS " \\t\\r\\n\\a"
