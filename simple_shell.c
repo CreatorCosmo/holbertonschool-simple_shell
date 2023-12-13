@@ -4,17 +4,24 @@ void execute_command(char *cmd) {
 	pid_t pid;
 	int status;
 	char *argv[2];
+	char *trimmed_cmd;
+	trimmed_cmd = trim(cmd);
 
-	argv[0] = cmd;
+	if (trimmed_cmd == NULL || strlen(trimmed_cmd) == 0) {
+		free(trimmed_cmd);
+		return;
+	}
+	argv[0] = trimmed_cmd;
 	argv[1] = NULL;
 
 	if ((pid = fork()) == -1) {
 		perror("Error");
+		free(trimmed_cmd);
 		return;
 	}
 	if (pid == 0) {
-		if (execve(cmd, argv, NULL) == -1) {
-			perror(cmd);
+		if (execve(trimmed_cmd, argv, NULL) == -1) {
+			perror(trimmed_cmd);
 		}
 		exit(EXIT_FAILURE);
 	} else {
@@ -22,6 +29,7 @@ void execute_command(char *cmd) {
 			waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
+	free(trimmed_cmd);
 }
 
 int main(void) {
@@ -31,6 +39,7 @@ int main(void) {
 
 	while (1) {
 		printf("#cisfun$ ");
+		fflush(stdout);
 		read = getline(&line, &len, stdin);
 		if (read == -1) {
 			if (feof(stdin)) {

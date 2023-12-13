@@ -7,5 +7,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+char *trim(char *str);
 
 #endif /* SHELL_H */
