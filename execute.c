@@ -21,7 +21,7 @@ int shell_num_builtins(void)
 
 /*
  * Builtin function implementations.
-*/
+ */
 
 /**
  * shell_cd - Changes the current directory
@@ -51,16 +51,16 @@ int shell_cd(char **args)
  */
 int shell_help(char **args)
 {
-    int i;
-    printf("Oscar Bedat and Andres Henderson\n");
-    printf("If you need help, call 1-800-help\n");
-    (void)args;
-    for (i = 0; i < shell_num_builtins(); i++)
-    {
-        printf("  %s\n", builtin_str[i]);
-    }
+	int i;
+	printf("Oscar Bedat and Andres Henderson\n");
+	printf("If you need help, call 1-800-help\n");
+	(void)args;
+	for (i = 0; i < shell_num_builtins(); i++)
+	{
+		printf("  %s\n", builtin_str[i]);
+	}
 
-    return (1);
+	return (1);
 }
 
 /**
