@@ -1,6 +1,3 @@
-To create a `README.md` file for your "Simple Shell" project, you can use the following content. You can copy this text and save it as a `README.md` file in your project directory.
-
-```markdown
 # Simple Shell
 
 ## Table of Contents
@@ -94,3 +91,4 @@ The project aims to create a simple yet functional shell interpreter. It support
 ---
 
 This `README.md` provides a comprehensive overview of your project, including its purpose, technical details, and how to use it. Make sure to replace placeholders like `[repository URL]` with actual information relevant to your project.
+
