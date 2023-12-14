@@ -1,5 +1,5 @@
 #include "shell.h"
-
+#include <ctype.h>
 /* Function prototypes for built-in commands */
 int shell_cd(char **args);
 int shell_help(char **args);
@@ -22,7 +22,24 @@ int shell_num_builtins(void)
 }
 
 /* Implementations of built-in functions: */
+/* ... [shell_cd, shell_help, shell_exit, shell_ctrld, shell_ls implementations] ... */
+/* Helper function to trim whitespace from a string */
+char *trim_whitespace(char *str)
+{
+    char *end;
 
+    while(isspace((unsigned char)*str)) str++;
+
+    if(*str == 0)
+        return str;
+
+    end = str + strlen(str) - 1;
+    while(end > str && isspace((unsigned char)*end)) end--;
+
+    end[1] = '\0';
+
+    return str;
+}
 /* shell_cd - Changes the current directory
  * @args: Array of arguments. args[0] is "cd". args[1] is the directory to change to.
  * Return: 1 on success
