@@ -1,72 +1,99 @@
 #include "shell.h"
 
+
 /**
- * _get_path - Retrieves the PATH environment variable.
- * @env: Environment variables
- * Return: The value of PATH
+ * _getenv - prts env to standard output
+ *
+ * @env: enviroment
+ *
  */
- 
- void _getenv(char **env) {
-    int i = 0;
-    while (env[i] != NULL) {
-        printf("%s\n", env[i]);
-        i++;
+
+void _getenv(char **env)
+{
+    size_t run = 0;
+
+    while (env[run])
+    {
+        write(STDOUT_FILENO, env[run], _strlen(env[run]));
+        write(STDOUT_FILENO, "\n", 1);
+        run++;
     }
 }
-char *_get_path(char **env) {
-    size_t index = 0;
+
+#include "shell.h"
+/**
+ * _get_path - get variable PATH.
+ * @env: enviromente local
+ * Return: value of PATH.
+ */
+
+char *_get_path(char **env)
+{
+    size_t index = 0, var = 0, count = 5;
     char *path = NULL;
 
-    while (env[index] != NULL) {
-        if (_strncmp(env[index], "PATH=", 5) == 0) {
-            path = strdup(env[index] + 5);
-            break;
-        }
-        index++;
-    }
+    for (index = 0; _strncmp(env[index], "PATH=", 5); index++)
+        ;
+    if (env[index] == NULL)
+        return (NULL);
 
-    return path;
+    for (count = 5; env[index][var]; var++, count++)
+        ;
+    path = malloc(sizeof(char) * (count + 1));
+
+    if (path == NULL)
+        return (NULL);
+
+    for (var = 5, count = 0; env[index][var]; var++, count++)
+        path[count] = env[index][var];
+
+    path[count] = '\0';
+    return (path);
 }
 
+#include "shell.h"
 /**
- * _values_path - Parses the PATH variable to find the full path of a command.
- * @arg: The command to find
- * @env: Environment variables
- * Return: 0 on success, -1 on failure
+ * _values_path - Separate the path in new strings.
+ * @arg: Command input of user.
+ * @env: Enviroment.
+ * Return: Pointer to strings.
  */
-int _values_path(char **arg, char **env) {
-    char *path = _get_path(env);
-    char *token = NULL;
-    struct stat stat_buf;
-    char *full_path = NULL;
+int _values_path(char **arg, char **env)
+{
+    char *token = NULL, *path_rela = NULL, *path_absol = NULL;
+    size_t value_path, len;
+    struct stat stat_lineptr;
 
-    if (path == NULL) {
-        return -1;
-    }
-
-    token = strtok(path, ":");
-    while (token != NULL) {
-        full_path = malloc(strlen(token) + strlen(*arg) + 2);
-        if (full_path == NULL) {
-            free(path);
-            return -1;
+    if (stat(*arg, &stat_lineptr) == 0)
+        return (-1);
+    path_rela = _get_path(env);/** gets the content of "PATH="*/
+    if (!path_rela)
+        return (-1);
+    token = strtok(path_rela, ":"); /**tokenizes the content of "PATH="*/
+    len = _strlen(*arg); /**gets length of arg*/
+    while (token)
+    {
+        value_path = _strlen(token);
+        path_absol = malloc(sizeof(char) * (value_path + len + 2));
+        if (!path_absol)
+        {
+            free(path_rela);
+            return (-1);
         }
-        strcpy(full_path, token);
-        strcat(full_path, "/");
-        strcat(full_path, *arg);
+        path_absol = strcpy(path_absol, token);
+        _strcat(path_absol, "/");
+        _strcat(path_absol, *arg);
 
-        if (stat(full_path, &stat_buf) == 0) {
-            free(*arg);
-            *arg = full_path;
-            free(path);
-            return 0;
+        if (stat(path_absol, &stat_lineptr) == 0)
+        {
+            *arg = path_absol;
+            free(path_rela);
+            return (0);
         }
-
-        free(full_path);
+        free(path_absol);
         token = strtok(NULL, ":");
     }
-
-    free(path);
-    return -1;
+    token = '\0';
+    free(path_rela);
+    return (-1);
 }
-
