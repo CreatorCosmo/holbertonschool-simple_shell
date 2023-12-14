@@ -15,7 +15,6 @@ int shell_ctrld(char **args);
 int shell_cd(char **args);
 int shell_help(char **args);
 int shell_exit(char **args);
-int shell_ls(char **args); /* Prototype for shell_ls */
 
 extern char **environ;
 
