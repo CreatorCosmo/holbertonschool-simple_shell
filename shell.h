@@ -11,11 +11,11 @@
 #include <errno.h>
 
 
-int lsh_ctrld(char **args);
-int lsh_cd(char **args);
-int lsh_help(char **args);
+int shell_ctrld(char **args);
+int shell_cd(char **args);
+int shell_help(char **args);
 extern char **environ;
-int lsh_exit(char **args);
+int shell_exit(char **args);
 int _strcmp(char *s1, char *s2);
 size_t _strncmp(char *s1, char *s2, size_t n);
 int _strlen(char *s);
