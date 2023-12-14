@@ -1,33 +1,24 @@
 #include "shell.h"
+
+/* Function prototypes for built-in commands */
 int shell_cd(char **args);
 int shell_help(char **args);
 int shell_exit(char **args);
 int shell_ctrld(char **args);
-/*
- * List of builtin commands, followed by their corresponding functions.
- */
+
+/* List of built-in command names and their corresponding functions */
 char *builtin_str[] = {"cd", "help", "exit", "^D"};
-
 int (*builtin_func[]) (char **) = {&shell_cd, &shell_help, &shell_exit, &shell_ctrld};
-/**
- * shell_num_builtins - Returns the number of built-in commands
- * Return: size
- */
 
+/* Returns the number of built-in commands */
 int shell_num_builtins(void)
 {
 	return (sizeof(builtin_str) / sizeof(char *));
 }
 
-/*
- * Builtin function implementations.
- */
+/* Built-in function implementations */
 
-/**
- * shell_cd - Changes the current directory
- * @args: List of args.  args[0] is "cd".  args[1] is the directory.
- * Return: 1 on success
- */
+/* Changes the current directory */
 int shell_cd(char **args)
 {
 	if (args[1] == NULL)
@@ -44,11 +35,7 @@ int shell_cd(char **args)
 	return (1);
 }
 
-/**
- * shell_help - prints the help for the shell
- * @args: List of args.  Not examined.
- * Return: Always returns 1, to continue executing.
- */
+/* Prints help information for the shell */
 int shell_help(char **args)
 {
 	int i;
@@ -63,11 +50,7 @@ int shell_help(char **args)
 	return (1);
 }
 
-/**
- * shell_exit - Exits the shell
- * @args: Array of arguments. Not used in this function.
- * Return: Always returns 0 to terminate execution.
- */
+/* Exits the shell */
 int shell_exit(char **args)
 {
 	(void)args;
@@ -75,11 +58,7 @@ int shell_exit(char **args)
 	return (200);
 }
 
-/**
- * shell_ctrld - Handles "^D" input (end-of-transmission)
- * @args: Array of arguments. Not used in this function.
- * Return: Always returns 0 to terminate execution.
- */
+/* Handles "^D" input (end-of-transmission) */
 int shell_ctrld(char **args)
 {
 	(void)args;
@@ -87,20 +66,9 @@ int shell_ctrld(char **args)
 	return (200);
 }
 
-/**
- *_fork_fun - foo that create a fork.
- *@arg: Command and values path.
- *@av: Has the name of our program.
- *@env: Environment
- *@lineptr: Command line for the user.
- *@np: ID of proces.
- *@c: Checker add new test
- *Return: 0 success
- */
-
+/* Creates a child process to execute a command */
 int _fork_fun(char **arg, char **av, char **env, char *lineptr, int np, int c)
 {
-
 	pid_t child;
 	int status, i = 0;
 	char *format = "%s: %d: %s: not found\n";
@@ -128,7 +96,9 @@ int _fork_fun(char **arg, char **av, char **env, char *lineptr, int np, int c)
 	else
 	{
 		wait(&status);
-		return (status);
+		if (WIFEXITED(status))
+			return WEXITSTATUS(status); /* Return the exit status of the child process */
 	}
 	return (0);
 }
+
