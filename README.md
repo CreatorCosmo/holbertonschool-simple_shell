@@ -78,15 +78,13 @@ The project aims to create a simple yet functional shell interpreter. It support
 - `str_utils.c`: String utility functions.
 - `values_path.c`: Processes path values.
 
-(Describe other files as needed.)
 
-### Flowchart
 
-(Include a link or image of the flowchart if available.)
 
 ## Authors
 
-[List of contributors]
+Geraldo Irizarry Martel
+Norman Colon
 
 ---
 
