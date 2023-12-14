@@ -6,6 +6,9 @@ int shell_help(char **args);
 int shell_exit(char **args);
 int shell_ctrld(char **args);
 
+/* Forward declaration of is_builtin_command */
+int is_builtin_command(char *command);
+
 /* List of built-in command names and their corresponding functions */
 char *builtin_str[] = {"cd", "help", "exit", "^D"};
 int (*builtin_func[]) (char **) = {&shell_cd, &shell_help, &shell_exit, &shell_ctrld};
@@ -16,91 +19,91 @@ int shell_num_builtins(void)
     return (sizeof(builtin_str) / sizeof(char *));
 }
 
-/* Built-in function implementations */
+/* Placeholder implementations for built-in functions */
 
-/* Changes the current directory */
 int shell_cd(char **args)
 {
-    if (args[1] == NULL)
-    {
-        fprintf(stderr, "hsh: expected argument to \"cd\"\n");
-    }
-    else
-    {
-        if (chdir(args[1]) != 0)
-        {
-            perror("hsh");
-        }
-    }
-    return (1);
+    /* Placeholder implementation */
+    (void)args; /* Prevent unused variable warning */
+    return 1;
 }
 
-/* Prints help information for the shell */
 int shell_help(char **args)
 {
-    int i;
-    printf("Oscar Bedat and Andres Henderson\n");
-    printf("If you need help, call 1-800-help\n");
-    (void)args; /* Args are not used in this function */
-    for (i = 0; i < shell_num_builtins(); i++)
-    {
-        printf("  %s\n", builtin_str[i]);
-    }
-
-    return (1);
+    /* Placeholder implementation */
+    (void)args; /* Prevent unused variable warning */
+    return 1;
 }
 
-/* Exits the shell */
 int shell_exit(char **args)
 {
-    (void)args; /* Args are not used in this function */
-    free(args);
-    return (200);
+    /* Placeholder implementation */
+    (void)args; /* Prevent unused variable warning */
+    return 1;
 }
 
-/* Handles "^D" input (end-of-transmission) */
 int shell_ctrld(char **args)
 {
-    (void)args; /* Args are not used in this function */
-    free(args);
-    return (200);
+    /* Placeholder implementation */
+    (void)args; /* Prevent unused variable warning */
+    return 1;
 }
 
-/* Creates a child process to execute a command */
+/**
+ *_fork_fun - foo that create a fork.
+ *@arg: Command and values path.
+ *@av: Has the name of our program.
+ *@env: Environment
+ *@lineptr: Command line for the user.
+ *@np: ID of proces.
+ *@c: Checker add new test
+ *Return: 0 success
+ */
+
 int _fork_fun(char **arg, char **av, char **env, char *lineptr, int np, int c)
 {
-    pid_t child;
-    int status, i = 0;
-    char *format = "%s: %d: %s: not found\n";
 
-    (void)lineptr;
-    (void)c;
+	pid_t child;
+	int status, i = 0;
+	char *format = "%s: %d: %s: not found\n";
 
-    if (arg[0] == NULL)
-        return (1); /* If no command is provided, return 1 */
+	if (arg[0] == NULL)
+		return (1);
+	for (i = 0; i < shell_num_builtins(); i++)
+	{
+		if (_strcmp(arg[0], builtin_str[i]) == 0)
+			return (builtin_func[i](arg));
+	}
+	child = fork();
+	if (child == 0)
+	{
+		if (execve(arg[0], arg, env) == -1)
+		{
+			fprintf(stderr, format, av[0], np, arg[0]);
+			if (!c)
+				free(arg[0]);
+			free(arg);
+			free(lineptr);
+			exit(errno);
+		}
+	}
+	else
+	{
+		wait(&status);
+		return (status);
+	}
+	return (0);
+}
 
-    /* Check if the command is a built-in function */
+/* Helper function to check if a command is a built-in command */
+int is_builtin_command(char *command)
+{
+    int i;
     for (i = 0; i < shell_num_builtins(); i++)
     {
-        if (_strcmp(arg[0], builtin_str[i]) == 0)
-            return (builtin_func[i](arg)); /* Execute the built-in function */
+        if (_strcmp(command, builtin_str[i]) == 0)
+            return 1; /* Command is a built-in command */
     }
-
-    child = fork();
-    if (child == 0) /* Child process */
-    {
-        if (execve(arg[0], arg, env) == -1) /* Execute the command */
-        {
-            fprintf(stderr, format, av[0], np, arg[0]); /* Print error if execve fails */
-            exit(127); /* Exit with status 127 for command not found */
-        }
-    }
-    else
-    {
-        wait(&status); /* Parent process waits for the child to finish */
-        if (WIFEXITED(status))
-            return WEXITSTATUS(status); /* Return the exit status of the child process */
-    }
-    return (0); /* Return 0 on success */
+    return 0; /* Command is not a built-in command */
 }
 
