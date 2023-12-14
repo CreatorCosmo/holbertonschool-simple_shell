@@ -1,6 +1,3 @@
-/* Combined file for string manipulation and tokenization */
-
-/* Contents of string_foos.c */
 #include "shell.h"
 
 /**
@@ -61,7 +58,7 @@ return (val);
  * Return: the length of the string
  */
 
-int _strlen(char *s)
+int _strlen(const char *s)
 {
     int i;
 
@@ -79,7 +76,7 @@ int _strlen(char *s)
  * Return: diference
  */
 
-size_t _strncmp(char *s1, char *s2, size_t n)
+size_t _strncmp(const char *s1, const char *s2, size_t n)
 {
     size_t i, j;
 
@@ -114,23 +111,6 @@ char *_strcpy(char *dest, char *src)
     dest[i + 1] = 0;
     return (dest);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* Contents of tokenizer.c */

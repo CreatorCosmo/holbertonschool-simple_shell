@@ -1,5 +1,5 @@
 #include "shell.h"
-
+#include <sys/stat.h>
 
 /**
  * _getenv - prts env to standard output
@@ -8,17 +8,20 @@
  *
  */
 
-void _getenv(char **env)
-{
-    size_t run = 0;
 
-    while (env[run])
+char *_getenv(char **env, const char *name)
+{
+    size_t i = 0;
+    size_t len = _strlen(name);
+    while (env[i])
     {
-        write(STDOUT_FILENO, env[run], _strlen(env[run]));
-        write(STDOUT_FILENO, "\n", 1);
-        run++;
+        if (_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
+            return (env[i] + len + 1);
+        i++;
     }
+    return (NULL);
 }
+
 
 #include "shell.h"
 /**
