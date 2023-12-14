@@ -38,13 +38,10 @@ int shell_help(char **args)
 /* Exits the shell */
 int shell_exit(char **args)
 {
-    /* Freeing any allocated memory if necessary */
-    (void)args; /* If args are not used in this function */
-
-    /* Exit with status 0 */
-    exit(0);
+    /* Exit the shell with status 0 */
+    (void)args; /* Prevent unused variable warning */
+    exit(0);    /* Exit with status 0 */
 }
-
 
 int shell_ctrld(char **args)
 {
