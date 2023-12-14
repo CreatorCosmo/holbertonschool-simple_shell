@@ -1,53 +1,93 @@
 #include "shell.h"
+int lsh_cd(char **args);
+int lsh_help(char **args);
+int lsh_exit(char **args);
+int lsh_ctrld(char **args);
 
-/* Function prototypes for built-in commands */
-int shell_cd(char **args);
-int shell_help(char **args);
-int shell_exit(char **args);
-int shell_ctrld(char **args);
-
-/* Forward declaration of is_builtin_command */
-int is_builtin_command(char *command);
-
-/* List of built-in command names and their corresponding functions */
+/*
+ * List of builtin commands, followed by their corresponding functions.
+ */
 char *builtin_str[] = {"cd", "help", "exit", "^D"};
-int (*builtin_func[]) (char **) = {&shell_cd, &shell_help, &shell_exit, &shell_ctrld};
 
-/* Returns the number of built-in commands */
-int shell_num_builtins(void)
+int (*builtin_func[]) (char **) = {&lsh_cd, &lsh_help, &lsh_exit, &lsh_ctrld};
+
+/**
+ * lsh_num_builtins - size
+ * Return: size
+ */
+
+int lsh_num_builtins(void)
 {
-    return (sizeof(builtin_str) / sizeof(char *));
+	return (sizeof(builtin_str) / sizeof(char *));
 }
 
-/* Placeholder implementations for built-in functions */
+/*
+ * Builtin function implementations.
+*/
 
-int shell_cd(char **args)
+/**
+ * lsh_cd - builtin to change dirs
+ * @args: List of args.  args[0] is "cd".  args[1] is the directory.
+ * Return: 1 on success
+ */
+int lsh_cd(char **args)
 {
-    /* Placeholder implementation */
-    (void)args; /* Prevent unused variable warning */
-    return 1;
+	if (args[1] == NULL)
+	{
+		fprintf(stderr, "hsh: expected argument to \"cd\"\n");
+	}
+	else
+	{
+		if (chdir(args[1]) != 0)
+		{
+			perror("hsh");
+		}
+	}
+	return (1);
 }
 
-int shell_help(char **args)
+/**
+ * lsh_help - prints the help for the shell
+ * @args: List of args.  Not examined.
+ * Return: Always returns 1, to continue executing.
+ */
+int lsh_help(char **args)
 {
-    /* Placeholder implementation */
-    (void)args; /* Prevent unused variable warning */
-    return 1;
+	int i;
+
+	printf("Oscar Bedat and Andres Henderson\n");
+	printf("If you need help, call 1-800-help\n");
+	(void)args;
+	for (i = 0; i < lsh_num_builtins(); i++)
+	{
+		printf("  %s\n", builtin_str[i]);
+	}
+
+	return (1);
 }
 
-/* Exits the shell */
-int shell_exit(char **args)
+/**
+ * lsh_exit - builtin to exit the shell
+ * @args: List of args.  Not examined.
+ * Return: Always returns 0, to terminate execution.
+ */
+int lsh_exit(char **args)
 {
-    /* Exit the shell with status 0 */
-    (void)args; /* Prevent unused variable warning */
-    exit(0);    /* Exit with status 0 */
+	(void)args;
+	free(args);
+	return (200);
 }
 
-int shell_ctrld(char **args)
+/**
+ * lsh_ctrld - builtin to handle "^D" call
+ * @args: List of args.  Not examined.
+ * Return: Always returns 0, to terminate execution.
+ */
+int lsh_ctrld(char **args)
 {
-    /* Placeholder implementation */
-    (void)args; /* Prevent unused variable warning */
-    return 1;
+	(void)args;
+	free(args);
+	return (200);
 }
 
 /**
@@ -70,7 +110,7 @@ int _fork_fun(char **arg, char **av, char **env, char *lineptr, int np, int c)
 
 	if (arg[0] == NULL)
 		return (1);
-	for (i = 0; i < shell_num_builtins(); i++)
+	for (i = 0; i < lsh_num_builtins(); i++)
 	{
 		if (_strcmp(arg[0], builtin_str[i]) == 0)
 			return (builtin_func[i](arg));
@@ -95,16 +135,3 @@ int _fork_fun(char **arg, char **av, char **env, char *lineptr, int np, int c)
 	}
 	return (0);
 }
-
-/* Helper function to check if a command is a built-in command */
-int is_builtin_command(char *command)
-{
-    int i;
-    for (i = 0; i < shell_num_builtins(); i++)
-    {
-        if (_strcmp(command, builtin_str[i]) == 0)
-            return 1; /* Command is a built-in command */
-    }
-    return 0; /* Command is not a built-in command */
-}
-
