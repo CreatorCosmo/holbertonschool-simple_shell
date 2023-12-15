@@ -1,17 +1,46 @@
-.TH 1 " Project: C - Simple Shell" "man_1_simple_shell"
-
+.TH SIMPLE SHELL 1 "12/14/2023" "1.0"
 .SH NAME
-
-.B
-
--
-
+simple_shell \- a simple UNIX command interpreter
+.SH SYNOPSIS
+.B ./hsh
 .SH DESCRIPTION
-
-.I 
-
-
-
+The Simple Shell is a basic command-line interpreter that mimics the functionality of traditional Unix shells. It allows users to run commands and programs on the operating system via a terminal emulator.
+.SH USAGE
+To start the shell in interactive mode, run:
+.RS
+./hsh
+.RE
+To use the shell in non-interactive mode, pipe commands into it, for example:
+.RS
+echo "ls -l" | ./hsh
+.RE
+.SH FILES
+.TP
+.B shell.c
+Main shell program.
+.TP
+.B execute.c
+Handles command execution.
+.TP
+.B getenv.c
+Retrieves environment variables.
+.TP
+.B getline_command.c
+Manages input lines.
+.TP
+.B get_path.c
+Handles the PATH variable.
+.TP
+.B shell.h
+Header file with function prototypes and definitions.
+.TP
+.B str_utils.c
+String utility functions.
+.TP
+.B values_path.c
+Processes path values.
+.SH SEE ALSO
+.B sh(1), bash(1), csh(1), tcsh(1)
 .SH AUTHOR
 
 Gerardo G. Irizarry Martell
