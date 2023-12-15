@@ -63,9 +63,6 @@ The project aims to create a simple yet functional shell interpreter. It support
 - Run interactively: `./hsh`.
 - Run non-interactively: `echo "[command]" | ./hsh`.
 
-### Testing
-
-(Provide instructions for testing the shell, including running any test scripts provided in the repository.)
 
 ### Files
 
