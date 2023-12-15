@@ -83,10 +83,8 @@ The project aims to create a simple yet functional shell interpreter. It support
 
 ## Authors
 
-Gerardo Irizarry Martell
+Gerardo G Irizarry Martell
+
 Norman Colon
 
 ---
-
-This `README.md` provides a comprehensive overview of your project, including its purpose, technical details, and how to use it. Make sure to replace placeholders like `[repository URL]` with actual information relevant to your project.
-
