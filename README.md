@@ -83,7 +83,7 @@ The project aims to create a simple yet functional shell interpreter. It support
 
 ## Authors
 
-Geraldo Irizarry Martel
+Gerardo Irizarry Martell
 Norman Colon
 
 ---
